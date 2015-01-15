@@ -1,11 +1,18 @@
 import java.io.File;
 import java.io.IOException;
+import java.util.Random;
 import java.util.Scanner;
 
 
 public class LSH 
 {
 	private Document[] docs;
+	private Random random;
+	
+	public LSH()
+	{
+		random=new Random(4);
+	}
 	
 	public void readFile(String location, int numToRead) throws IOException
 	{

@@ -22,15 +22,29 @@ public class Document
 	{
 		return set;
 	}
+	public HashSet<Integer> getUnion(Document anotherDoc)
+	{
+		HashSet<Integer> union=new HashSet<Integer>(set);
+		union.addAll(anotherDoc.getSet());
+		return union;
+	}
 	
 	public double computeJaccardSimilairty(Document anotherDoc)
 	{
 		HashSet<Integer> intersect=new HashSet<Integer>(set);
 		intersect.retainAll(anotherDoc.getSet());
-		HashSet<Integer> union=new HashSet<Integer>(set);
-		union.addAll(anotherDoc.getSet());
 		
-		return ( (double) intersect.size()/ (double) union.size() );
+		return ( (double) intersect.size()/ (double) getUnion(anotherDoc).size() );
+	}
+	
+	public boolean[][] computeSignatureMatrix(Document anotherDoc)
+	{
+		int numOfRows=getUnion(anotherDoc).size();
+		
+		boolean[][] toReturn= new boolean[numOfRows][2];
+		
+		
+		return toReturn;
 	}
 	
 	public String toString()
