@@ -14,16 +14,21 @@ public class LSH
 		scanner.nextInt();
 		scanner.nextInt();
 		
-		docs=new Document[numOfDocuments];
-		for(int i=1; i<docs.length+1; i++)
+		if(numToRead>numOfDocuments)
+			numToRead=numOfDocuments;
+		
+		docs=new Document[numToRead+1];
+		for(int i=1; i<docs.length; i++)
 		{
 			docs[i]=new Document(i);
 		}
 		
+		scanner.nextLine(); //This was not my idea -Andrew 
 		while(scanner.hasNextLine())
 		{
 			String curLine=scanner.nextLine();
 			String[] splitLine=curLine.split(" ");
+			
 			if(Integer.parseInt(splitLine[0])>numToRead)
 			{
 				break;
@@ -31,16 +36,30 @@ public class LSH
 			docs[Integer.parseInt(splitLine[0])].add(Integer.parseInt(splitLine[1]));
 		}
 		
+		for(int i=1; i<docs.length; i++)
+		{
+			System.out.println(docs[i]);
+		}
+		
 	}
 	
-	public int getJSimilairty(int docNum1, int docNum2)
+	public double getJSimilairty(int docNum1, int docNum2)
 	{
 		return docs[docNum1].computeJaccardSimilairty(docs[docNum2]);
 	}
 	
 	public static void main(String[] args)
 	{
-		
+		LSH lsh=new LSH();
+		try
+		{
+			lsh.readFile("/tmp/docword.enron.txt", 500);
+		}
+		catch(IOException e)
+		{
+			System.out.println(e);
+		}
+		System.out.println(lsh.getJSimilairty(24, 340));
 	}
 
 }

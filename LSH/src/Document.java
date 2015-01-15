@@ -23,12 +23,18 @@ public class Document
 		return set;
 	}
 	
-	public int computeJaccardSimilairty(Document anotherDoc)
+	public double computeJaccardSimilairty(Document anotherDoc)
 	{
 		HashSet<Integer> intersect=new HashSet<Integer>(set);
-		intersect.removeAll(anotherDoc.getSet());
+		intersect.retainAll(anotherDoc.getSet());
 		HashSet<Integer> union=new HashSet<Integer>(set);
 		union.addAll(anotherDoc.getSet());
-		return intersect.size()/union.size();
+		
+		return ( (double) intersect.size()/ (double) union.size() );
+	}
+	
+	public String toString()
+	{
+		return docNum+" "+set;
 	}
 }
