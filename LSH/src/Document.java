@@ -22,6 +22,7 @@ public class Document
 	{
 		return set;
 	}
+	
 	public HashSet<Integer> getUnion(Document anotherDoc)
 	{
 		HashSet<Integer> union=new HashSet<Integer>(set);
@@ -37,7 +38,7 @@ public class Document
 		return ( (double) intersect.size()/ (double) getUnion(anotherDoc).size() );
 	}
 	
-	public boolean[][] computeSignatureMatrix(Document anotherDoc)
+	public int[][] computeSignatureMatrix(Document anotherDoc)
 	{
 		int numOfRows=getUnion(anotherDoc).size();
 		
