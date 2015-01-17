@@ -4,6 +4,7 @@ import java.util.Random;
 import java.util.Scanner;
 
 
+
 public class LSH 
 {
 	private Document[] docs;
