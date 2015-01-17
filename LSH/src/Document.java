@@ -1,4 +1,3 @@
-import java.util.ArrayList;
 import java.util.HashSet;
 
 
@@ -38,14 +37,9 @@ public class Document
 		return ( (double) intersect.size()/ (double) getUnion(anotherDoc).size() );
 	}
 	
-	public int[][] computeSignatureMatrix(Document anotherDoc)
+	public boolean hasWord(int word)
 	{
-		int numOfRows=getUnion(anotherDoc).size();
-		
-		boolean[][] toReturn= new boolean[numOfRows][2];
-		
-		
-		return toReturn;
+		return set.contains(word);
 	}
 	
 	public String toString()
