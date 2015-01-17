@@ -71,7 +71,7 @@ public class LSH
 			System.out.println(e);
 		}
 		System.out.println(lsh.getJSimilairty(24, 340));
-		int[][] signatureMatrix=lsh.computeSignatureMatrix(4);
+		int[][] signatureMatrix=lsh.computeSignatureMatrix(1000);
 		for(int i=0; i<signatureMatrix.length; i++)
 		{
 			for(int j=0; j<signatureMatrix[0].length; j++)
@@ -91,13 +91,13 @@ public class LSH
 		}
 		int numOfUniqueWords=unionOfAll.size();
 
-		int[][] toReturn= new int[numOfHashFunctions][docs.length];
+		int[][] signatureMatrix= new int[numOfHashFunctions][docs.length];
 
 		for(int i=0; i<numOfHashFunctions; i++)
 		{
 			for(int j=1; j<docs.length; j++)
 			{
-				toReturn[i][j-1]=numOfUniqueWords+1;
+				signatureMatrix[i][j-1]=numOfUniqueWords+1;
 			}
 		}
 
@@ -118,9 +118,9 @@ public class LSH
 					for(int i=0; i<funcs.length; i++)
 					{
 						int hashedValue=funcs[i].applyHashFunction(seenWords);
-						if(hashedValue<toReturn[i][j-1])
+						if(hashedValue<signatureMatrix[i][j-1])
 						{
-							toReturn[i][j-1]=hashedValue;
+							signatureMatrix[i][j-1]=hashedValue;
 						}
 					}
 				}
@@ -129,7 +129,7 @@ public class LSH
 		}
 
 
-		return toReturn;
+		return signatureMatrix;
 	}
 
 
