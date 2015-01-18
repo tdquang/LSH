@@ -1,7 +1,8 @@
-/*  Authors: Andrew Elenbogen, Quang Tran
+/**  Authors: Andrew Elenbogen, Quang Tran
 	File: Documents.java
 	Date: January 17th 2015
-	Description: Stores words present in each document
+	Description: Stores words present in each document. A pretty simple data storage class that isn't much beyond a wrapper for a set and 
+	an integer id.
 */
 
 import java.util.HashSet;
@@ -36,7 +37,7 @@ public class Document
 		return union;
 	}
 	
-	// Computes Jaccard Similarity by dividing the intersection of words of two documents by the union of their words
+	// Computes Jaccard Similarity of this document and another given document
 	public double computeJaccardSimilarity(Document anotherDoc)
 	{
 		HashSet<Integer> intersect=new HashSet<Integer>(set);

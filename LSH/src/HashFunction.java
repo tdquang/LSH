@@ -1,4 +1,4 @@
-/* Authors: Andrew Elenbogen, Quang Tran
+/** Authors: Andrew Elenbogen, Quang Tran
    File: HashFunction.java
    Date: January 17th 2015
    Description: This class generates random hash functions ax + b mod c, 
