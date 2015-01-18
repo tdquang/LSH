@@ -1,3 +1,9 @@
+/*  Authors: Andrew Elenbogen, Quang Tran
+	File: Documents.java
+	Date: January 17th 2015
+	Description: Stores words present in each document
+*/
+
 import java.util.HashSet;
 
 
@@ -22,6 +28,7 @@ public class Document
 		return set;
 	}
 	
+	// Returns the union of two documents
 	public HashSet<Integer> getUnion(Document anotherDoc)
 	{
 		HashSet<Integer> union=new HashSet<Integer>(set);
@@ -29,7 +36,8 @@ public class Document
 		return union;
 	}
 	
-	public double computeJaccardSimilairty(Document anotherDoc)
+	// Computes Jaccard Similarity by dividing the intersection of words of two documents by the union of their words
+	public double computeJaccardSimilarity(Document anotherDoc)
 	{
 		HashSet<Integer> intersect=new HashSet<Integer>(set);
 		intersect.retainAll(anotherDoc.getSet());

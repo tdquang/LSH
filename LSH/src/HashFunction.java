@@ -1,3 +1,12 @@
+/* Authors: Andrew Elenbogen, Quang Tran
+   File: HashFunction.java
+   Date: January 17th 2015
+   Description: This class generates random hash functions ax + b mod c, 
+   where a is a random coprime number with c,
+   b is a random number between 0 and c,
+   and c is the number of unique words in a set of documents 
+*/
+
 import java.math.BigInteger;
 import java.util.Random;
 
