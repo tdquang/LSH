@@ -20,6 +20,7 @@ public class LSH
 	private Document[] docs;
 	private Random random;
 	private ArrayList<HashMap<ArrayList<Integer>, ArrayList<Integer>>> arrayOfCandidateMaps;
+	private HashMap<Integer, ArrayList<ArrayList<Integer>>> reverseList;
 	/*This is the data file's location, stored as a constant*/
 	//private static final String DATAFILE_LOCATION="/Users/dangquang2011/LSH/LSH/src/docword.enron.txt";
 	private static final String DATAFILE_LOCATION="C:\\Users\\Andrew\\Desktop\\docword.enron.txt";
@@ -214,11 +215,14 @@ public class LSH
 		if(arrayOfCandidateMaps==null)
 		{
 			arrayOfCandidateMaps=new ArrayList<HashMap<ArrayList<Integer>, ArrayList<Integer>>>(numOfRows/r);
+			reverseList=new HashMap<Integer, ArrayList<ArrayList<Integer>>>();
 
 			for(int l=0; l< numOfRows/r; l++)
 			{
 				if(l==arrayOfCandidateMaps.size())
+				{
 					arrayOfCandidateMaps.add(new HashMap<ArrayList<Integer>, ArrayList<Integer>>());
+				}
 				for(int j=0; j< signatureMatrix[0].length; j++)
 				{
 					for(int i=0; i<signatureMatrix.length; i+=r)
@@ -231,21 +235,21 @@ public class LSH
 						if(arrayOfCandidateMaps.get(l).get(vector)==null)
 							arrayOfCandidateMaps.get(l).put(vector, new ArrayList<Integer>());
 						arrayOfCandidateMaps.get(l).get(vector).add(j+1);
+						if(reverseList.get(j+1)==null)
+							reverseList.put(j+1, new ArrayList<ArrayList<Integer>>());
+						reverseList.get(j+1).add(vector);
 					}
 				}
 			}
 		}
 		HashSet<Integer> possibleCandidates= new HashSet<Integer>();
-		for(int i=0; i<numOfRows/r; i++)
+		
+		
+		for(int i=0; i< arrayOfCandidateMaps.size(); i++)
 		{
-			for(ArrayList<Integer> currentVector: arrayOfCandidateMaps.get(i).keySet())
-			{
-				if(currentVector.contains(docIdToFindNeighborsOf))
-				{
-					possibleCandidates.addAll(arrayOfCandidateMaps.get(i).get(currentVector));
-				}
-			}
+			possibleCandidates.addAll(arrayOfCandidateMaps.get(i).get(reverseList.get(docIdToFindNeighborsOf).get(i)));
 		}
+	
 		possibleCandidates.remove(docIdToFindNeighborsOf);
 		
 		while(possibleCandidates.size()<numberOfNearNeighbors)
