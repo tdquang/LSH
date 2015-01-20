@@ -13,7 +13,7 @@ public class DocumentComparator implements Comparator<Document>
 	@Override
 	public int compare(Document doc1, Document doc2) 
 	{
-		return (int) Math.round(doc2.computeJaccardSimilarity(doc)-doc1.computeJaccardSimilarity(doc));
+		return (int) Math.round(doc1.computeJaccardSimilarity(doc)-doc2.computeJaccardSimilarity(doc));
 	}
 	
 }

@@ -53,6 +53,6 @@ public class Document
 	
 	public String toString()
 	{
-		return docNum+" "+set;
+		return "Document Number: "+docNum+" "+set;
 	}
 }
