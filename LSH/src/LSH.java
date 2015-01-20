@@ -9,6 +9,7 @@
 import java.io.File;
 import java.io.IOException;
 import java.util.HashSet;
+import java.util.PriorityQueue;
 import java.util.Random;
 import java.util.Scanner;
 
@@ -138,6 +139,42 @@ public class LSH
 		}
 
 		return ((double) num_identical/ (double) signatureMatrixRows);
+	}
+	
+	/**
+	 * 
+	 * @param k
+	 * @param docId
+	 * @return The average Jaccard similairty of the k nearestNeighbors
+	 */
+	public double kNearestNeighbors(int k, int docId)
+	{
+		PriorityQueue<Document> queue=new PriorityQueue<Document>(k, new DocumentComparator(docs[docId]));
+		
+		for(int i=1; i<docs.length; i++)
+		{
+			queue.add(docs[i]);
+			if(queue.size()>k)
+			{
+				queue.poll();
+			}
+		}
+		double total=0.0; 
+		while(queue.size()>0)
+		{
+			total+=docs[docId].computeJaccardSimilarity(queue.poll());
+		}
+		return total/k;
+	}
+	
+	public double averageOfAverages(int k)
+	{
+		double totalOfAverages=0;
+		for(int i=1; i<docs.length; i++)
+		{
+			totalOfAverages+=kNearestNeighbors(k, i);
+		}
+		return totalOfAverages/(docs.length-1);
 	}
 
 	public static void main(String[] args)
