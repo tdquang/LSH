@@ -213,6 +213,14 @@ public class LSH
 
 			double similarity = lsh.computeSignatureMatrix(signatureMatrixNumOfRows, firstID, secondID);
 			System.out.println("Jaccard similarity based on signature matrix: " +similarity);
+			
+			int k;
+			System.out.print("Enter k-nearest neighbors: ");
+			k = userInputScanner.nextInt();	
+			
+			System.out.println("Average of averages: "+averageOfAverages(k))
+
+			
 		}
 
 	}
