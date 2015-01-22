@@ -233,8 +233,8 @@ public class LSH
 					{
 						ArrayList<Integer> vector=new ArrayList<Integer>();
 						for(int k=0; k<r; k++)
-						{	
-							vector.add(signatureMatrix[i+k][j]);
+						{	if(i+k<signatureMatrix.length)
+								vector.add(signatureMatrix[i+k][j]);
 						}
 						if(arrayOfCandidateMaps.get(l).get(vector)==null)
 							arrayOfCandidateMaps.get(l).put(vector, new ArrayList<Integer>());
@@ -308,7 +308,7 @@ public class LSH
 			//Prompting for number of hash functions
 			int k;
 			System.out.print("Enter in the number of nearest neighbors k: ");
-			k = userInputScanner.nextInt();	
+			k = userInputScanner.nextInt();
 			
 			int signatureMatrixNumOfRows;
 			System.out.print("Enter in number of rows to use for signature matrix: ");
@@ -318,11 +318,6 @@ public class LSH
 			System.out.print("Enter in number of rows r to use for each band: ");
 			r = userInputScanner.nextInt();	
 			
-/*			double similarity = lsh.useSignatureMatrixForJaccardSimilairty(signatureMatrixNumOfRows, firstID, secondID);
-			System.out.println("Jaccard similarity based on signature matrix: " +similarity);
-
-
-*/
 			long startTime, endTime;
 			
 			startTime=System.currentTimeMillis();
