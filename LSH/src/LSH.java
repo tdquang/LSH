@@ -81,13 +81,11 @@ public class LSH
 		return docs[docNum1].computeJaccardSimilarity(docs[docNum2]);
 	}
 
-	/** Computes the signature matrix, and then returns the Jaccard Similarity by dividing 
-	the number of identical hash values corresponding to the 2 documents by the total number of hash functions. Note that
-	the signature Matrix itself is not output or returned.
-	@param signatureMatrixRows The number of rows in the signature matrix.
-	@param doc1 The unique id of the first doc to perform the calculations on
-	@param doc2 The unique id of the second doc to perform the calculations on
-	 */
+	/** Computes Jaccard Similarity based on signature matrix
+	*@param signatureMatrixRows
+	*@param doc1 The unique id of the first doc to perform the calculations on
+	* @param doc2 The unique id of the second doc to perform the calculations on
+	*/
 	public double useSignatureMatrixForJaccardSimilairty(int signatureMatrixRows, int docNum1, int docNum2)
 	{
 		int[][] signatureMatrix=computeSignatureMatrix(signatureMatrixRows);
@@ -102,7 +100,9 @@ public class LSH
 
 		return ((double) num_identical/ (double) signatureMatrixRows);
 	}
-	
+	/** Computes the signature matrix
+	@param signatureMatrixRows The number of rows in the signature matrix
+	 */
 	public int[][] computeSignatureMatrix(int signatureMatrixRows)
 	{
 		HashSet<Integer> unionOfAll=new HashSet<Integer>();
@@ -187,7 +187,10 @@ public class LSH
 		}
 		return total/k;
 	}
-
+	
+	/* Computes average of average similarities for each document using brute force
+	* @param number of k nearest neighbors 
+	*/
 	public double averageOfAveragesBruteForce(int k)
 	{
 		double totalOfAverages=0;
@@ -197,6 +200,11 @@ public class LSH
 		}
 		return totalOfAverages/(docs.length-1);
 	}
+	/** Computes the average of average similarities for each document using LSH
+	*@param number of k nearest neighbors 
+	*@param number of rows in the signature matrix
+	*@param r number of rows per band
+	*/
 	public double averageOfAveragesLSH(int k, int numOfRows, int r)
 	{
 		double totalOfAverages=0;
@@ -207,14 +215,21 @@ public class LSH
 		return totalOfAverages/(docs.length-1);
 	}
 	
-	
+	/** Computes average similarity for a specific document
+	 * @param k number of near neighbors
+	 * @param r ruber of rows per band
+	 * @param id of the specific document whose neighbors we are looking at
+	*/
 	public double nearestNeighborsLSH(int numberOfNearNeighbors, int numOfRows, int r, int docIdToFindNeighborsOf)
 	{
+		// Number of neighbors cannot be larger than number of documents - 1
 		if(numberOfNearNeighbors>docs.length-1)
 		{
 			numberOfNearNeighbors=docs.length-1;
 		}
-		
+		// Creating arrayOfCandidateMaps an array list of hash maps, with each hash map corresponding to a band. 
+		// Each hashmap contains vectors as keys and documents id as values
+		// Creating reverseList, which is a hashmap with document id as keys and vectors within that document as values
 		if(arrayOfCandidateMaps==null)
 		{
 			int[][] signatureMatrix=computeSignatureMatrix(numOfRows);
@@ -223,21 +238,25 @@ public class LSH
 
 			for(int l=0; l< numOfRows/r; l++)
 			{
+				//If the HashMap that will be used hasn't been created, intialize it
 				if(l==arrayOfCandidateMaps.size())
 				{
 					arrayOfCandidateMaps.add(new HashMap<ArrayList<Integer>, ArrayList<Integer>>());
 				}
 				for(int j=0; j< signatureMatrix[0].length; j++)
 				{
+					//For each row, running once every r rows
 					for(int i=0; i<signatureMatrix.length; i+=r)
 					{
 						ArrayList<Integer> vector=new ArrayList<Integer>();
+						//Place all of the r rows into the signature matrix
 						for(int k=0; k<r; k++)
 						{	if(i+k<signatureMatrix.length)
 								vector.add(signatureMatrix[i+k][j]);
 						}
 						if(arrayOfCandidateMaps.get(l).get(vector)==null)
 							arrayOfCandidateMaps.get(l).put(vector, new ArrayList<Integer>());
+						//+1 because there is nothing in docs[0]
 						arrayOfCandidateMaps.get(l).get(vector).add(j+1);
 						if(reverseList.get(j+1)==null)
 							reverseList.put(j+1, new ArrayList<ArrayList<Integer>>());
@@ -246,8 +265,9 @@ public class LSH
 				}
 			}
 		}
-		HashSet<Integer> possibleCandidates= new HashSet<Integer>();
-		
+		// Creating Hashset of possible candidates
+		HashSet<Integer> possibleCandidates = new HashSet<Integer>();
+		// Adding documents that appear in the same bucket as the desired document
 		for(int i=0; i< arrayOfCandidateMaps.size(); i++)
 		{
 			possibleCandidates.addAll(arrayOfCandidateMaps.get(i).get(reverseList.get(docIdToFindNeighborsOf).get(i)));
@@ -260,7 +280,7 @@ public class LSH
 			possibleCandidates.add(random.nextInt(docs.length-1)+1);
 			possibleCandidates.remove(docIdToFindNeighborsOf);
 		}
-		
+		//Use a priority queue to quickly find the best k canidates
 		PriorityQueue<Document> queue=new PriorityQueue<Document>(numberOfNearNeighbors, new DocumentComparator(docs[docIdToFindNeighborsOf]));
 
 		for(Integer candidate: possibleCandidates )
@@ -293,19 +313,6 @@ public class LSH
 				System.out.println(e);
 			}
 
-			// Prompting for first ID
-/*			int firstID;
-			System.out.print("Enter the first document's id number: ");
-			firstID = userInputScanner.nextInt();
-			// Prompting for second ID
-			int secondID;
-			System.out.print("Enter the second document's id number: ");
-			secondID = userInputScanner.nextInt();		
-
-			System.out.println("Jaccard similarity: " +lsh.getJSimilarity(firstID, secondID));*/
-			
-			
-			//Prompting for number of hash functions
 			int k;
 			System.out.print("Enter in the number of nearest neighbors k: ");
 			k = userInputScanner.nextInt();
