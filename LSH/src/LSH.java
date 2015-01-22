@@ -210,10 +210,14 @@ public class LSH
 	
 	public double nearestNeighborsLSH(int numberOfNearNeighbors, int numOfRows, int r, int docIdToFindNeighborsOf)
 	{
-		int[][] signatureMatrix=computeSignatureMatrix(numOfRows);
+		if(numberOfNearNeighbors>docs.length-1)
+		{
+			numberOfNearNeighbors=docs.length-1;
+		}
 		
 		if(arrayOfCandidateMaps==null)
 		{
+			int[][] signatureMatrix=computeSignatureMatrix(numOfRows);
 			arrayOfCandidateMaps=new ArrayList<HashMap<ArrayList<Integer>, ArrayList<Integer>>>(numOfRows/r);
 			reverseList=new HashMap<Integer, ArrayList<ArrayList<Integer>>>();
 
@@ -243,7 +247,6 @@ public class LSH
 			}
 		}
 		HashSet<Integer> possibleCandidates= new HashSet<Integer>();
-		
 		
 		for(int i=0; i< arrayOfCandidateMaps.size(); i++)
 		{
@@ -320,14 +323,16 @@ public class LSH
 
 
 */
-			long startTime=System.currentTimeMillis();
+			long startTime, endTime;
+			
+			startTime=System.currentTimeMillis();
 			System.out.println("Average of averages using brute force: "+lsh.averageOfAveragesBruteForce(k));
-			long endTime=System.currentTimeMillis();
-			System.out.println("Time taken: "+(endTime-startTime)/1000);
+			endTime=System.currentTimeMillis();
+			System.out.println("Time taken: "+((double) endTime-(double) startTime)/1000.0);
 			startTime=System.currentTimeMillis();
 			System.out.println("Average of averages using lsh: "+lsh.averageOfAveragesLSH(k, signatureMatrixNumOfRows, r));
 			endTime=System.currentTimeMillis();
-			System.out.println("Time taken: "+(endTime-startTime)/1000);
+			System.out.println("Time taken: "+((double) endTime-(double)startTime)/1000.0);
 		}
 
 	}
